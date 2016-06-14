@@ -2,12 +2,12 @@ package com.tinet.ctilink.data.request;
 
 /**
  * @author fengwei //
- * @date 16/6/14 15:00
+ * @date 16/6/14 17:18
  */
-public class InvestigationGetRequest {
+public class CdrGetRequest {
     private int enterpriseId;
 
-    private String mainUniqueId;
+    private String uniqueId;
 
     public int getEnterpriseId() {
         return enterpriseId;
@@ -17,11 +17,11 @@ public class InvestigationGetRequest {
         this.enterpriseId = enterpriseId;
     }
 
-    public String getMainUniqueId() {
-        return mainUniqueId;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
-    public void setMainUniqueId(String mainUniqueId) {
-        this.mainUniqueId = mainUniqueId;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

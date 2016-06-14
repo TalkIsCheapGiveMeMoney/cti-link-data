@@ -1,6 +1,5 @@
 package com.tinet.ctilink.data.service;
 
-import com.amazonaws.services.dynamodbv2.document.Item;
 import com.tinet.ctilink.data.request.InvestigationGetRequest;
 import com.tinet.ctilink.data.request.InvestigationQueryRequest;
 import com.tinet.ctilink.data.response.ApiResult;

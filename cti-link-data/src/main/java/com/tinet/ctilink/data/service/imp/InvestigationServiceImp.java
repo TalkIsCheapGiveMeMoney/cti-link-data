@@ -15,7 +15,6 @@ import com.tinet.ctilink.data.service.CtiLinkInvestigationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
