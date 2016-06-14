@@ -12,4 +12,14 @@ public class DataConst {
     public static final String INVESTIGATION_RECORD_END_TIME_INDEX_NAME = "endTimeIndex";
 
 
+    public static final String CDR_HASH_KEY_NAME = "cdr_enterprise_id";
+
+    public static final String CDR_RANGE_KEY_NAME = "cdr_unique_id";
+
+    public static final String CDR_MAIN_UNIQUE_ID = "cdr_main_unique_id";
+
+    public static final String CDR_MAIN_UNIQUE_ID_INDEX_NAME = "mainUniqueIdIndex";
+
+    public static final String CDR_END_TIME_INDEX_NAME = "endTimeIndex";
+
 }
