@@ -1,4 +1,4 @@
-package com.tinet.ctilink.data.service;
+package com.tinet.ctilink.data.service.imp;
 
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
@@ -6,7 +6,6 @@ import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.tinet.ctilink.aws.AwsDynamoDBService;
 import com.tinet.ctilink.data.inc.DataConst;
-import com.tinet.ctilink.data.inc.DataMacro;
 import com.tinet.ctilink.data.request.CdrGetRequest;
 import com.tinet.ctilink.data.request.CdrQueryRequest;
 import com.tinet.ctilink.data.response.ApiResult;
@@ -23,7 +22,7 @@ import java.util.Map;
  * @date 16/6/14 17:37
  */
 @Service
-public class CdrSupport {
+public class CdrServiceImp {
 
     @Autowired
     private AwsDynamoDBService awsDynamoDBService;
@@ -38,13 +37,8 @@ public class CdrSupport {
     }
 
     public ApiResult<List<Map<String, Object>>> query(String tableName, CdrQueryRequest request) {
-        int limit = request.getLimit();
-        if (limit == 0) {
-            limit = 10;
-        }
-        if (limit > 5000) {
-            limit = 5000;
-        }
+        int limit = (request.getLimit() == 0) ? DataConst.CDR_LIMIT_DEFAULT
+                : (request.getLimit() > DataConst.CDR_LIMIT_MAX ? DataConst.CDR_LIMIT_MAX : request.getLimit());
 
         String indexName;
         String keyConditionExpression;
@@ -62,16 +56,16 @@ public class CdrSupport {
             valueMap.withLong(":toTime", request.getToTime());
         }
 
-        ItemCollection<QueryOutcome> items = awsDynamoDBService.query(tableName, indexName
+        ItemCollection<QueryOutcome> itemCollection = awsDynamoDBService.query(tableName, indexName
                 , keyConditionExpression, valueMap, limit);
-        if (items != null) {
+        if (itemCollection != null) {
             List<Map<String, Object>> list = new ArrayList<>();
-            for (Item item : items) {
+            for (Item item : itemCollection) {
                 list.add(item.asMap());
             }
-
             return new ApiResult<>(list);
         }
         return new ApiResult<>(ApiResult.SUCCESS_RESULT);
     }
+
 }

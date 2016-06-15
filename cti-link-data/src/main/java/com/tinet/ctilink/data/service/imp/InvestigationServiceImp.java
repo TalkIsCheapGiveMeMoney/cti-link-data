@@ -30,7 +30,7 @@ public class InvestigationServiceImp implements CtiLinkInvestigationService {
 
     @Override
     public ApiResult<Map<String, Object>> get(InvestigationGetRequest request) {
-        Item item = awsDynamoDBService.getItem(DataMacro.INVESTIGATION_RECORD, DataConst.INVESTIGATION_RECORD_HASH_KEY_NAME, request.getEnterpriseId()
+        Item item = awsDynamoDBService.getItem(DataMacro.INVESTIGATION_RECORD_TABLE_NAME, DataConst.INVESTIGATION_RECORD_HASH_KEY_NAME, request.getEnterpriseId()
                 , DataConst.INVESTIGATION_RECORD_RANGE_KEY_NAME, request.getMainUniqueId());
         if (item != null) {
             new ApiResult<>(item.asMap());
@@ -40,20 +40,15 @@ public class InvestigationServiceImp implements CtiLinkInvestigationService {
 
     @Override
     public ApiResult<List<Map<String, Object>>> query(InvestigationQueryRequest request) {
-        int limit = request.getLimit();
-        if (limit == 0) {
-            limit = 10;
-        }
-        if (limit > 5000) {
-            limit = 5000;
-        }
+        int limit = (request.getLimit() == 0) ? DataConst.CDR_LIMIT_DEFAULT
+                : (request.getLimit() > DataConst.CDR_LIMIT_MAX ? DataConst.CDR_LIMIT_MAX : request.getLimit());
 
         String keyConditionExpression = "enterpriseId = :enterpriseId and endTime between :fromTime and :toTime";
         ValueMap valueMap = new ValueMap();
         valueMap.withInt(":enterpriseId", request.getEnterpriseId());
         valueMap.withLong(":fromTime", request.getFromTime());
         valueMap.withLong(":toTime", request.getToTime());
-        ItemCollection<QueryOutcome> items = awsDynamoDBService.query(DataMacro.INVESTIGATION_RECORD, DataConst.INVESTIGATION_RECORD_END_TIME_INDEX_NAME
+        ItemCollection<QueryOutcome> items = awsDynamoDBService.query(DataMacro.INVESTIGATION_RECORD_TABLE_NAME, DataConst.INVESTIGATION_RECORD_END_TIME_INDEX_NAME
                 , keyConditionExpression, valueMap, limit);
         if (items != null) {
             List<Map<String, Object>> list = new ArrayList<>();
