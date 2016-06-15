@@ -40,17 +40,24 @@
 	<!-- 注入Spring上下文 -->
 	<bean id="contextUtil" class="com.tinet.ctilink.util.ContextUtil" />
 
-	<!-- AWS sqs -->
+	<!-- AWS -->
 	<bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials">
 		<constructor-arg index="0" value="${aws.accessKey}"/>
 		<constructor-arg index="1" value="${aws.secretAccessKey}"/>
+	</bean>
+
+	<!-- AWS S3 -->
+	<bean id="awsS3Client" class="com.amazonaws.services.s3.AmazonS3Client">
+		<constructor-arg index="0" ref="awsCredentials" />
+	</bean>
+	<bean id="awsS3Service" class="com.tinet.ctilink.aws.AwsS3Service">
+		<property name="awsS3Client" ref="awsS3Client" />
 	</bean>
 
 	<!-- AWS dynamoDB -->
 	<bean id="dynamoDBClient" class="com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient">
 		<constructor-arg index="0" ref="awsCredentials" />
 	</bean>
-
 	<bean id="awsDynamoDBService" class="com.tinet.ctilink.aws.AwsDynamoDBService">
 		<property name="amazonDynamoDB" ref="dynamoDBClient" />
 	</bean>
